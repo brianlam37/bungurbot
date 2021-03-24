@@ -1,28 +1,28 @@
 const fetch = require('node-fetch');
 const { imgur } = require('../config.json');
-const rand = require('../getRandomInt.js')
+const rand = require('../getRandomInt.js');
 module.exports = {
-	name: 'bunPic',
+	name: 'bunpic',
 	description: 'Get buns from imgur',
 	aliases: ['bp'],
 	usage: '[command name]',
-	cooldown: 3,
+	cooldown: 0,
 	async execute(message, args) {
 		const headers = {
-			"Authorization":`Client-ID ${imgur}`
-		}
+			'Authorization':`Client-ID ${imgur}`,
+		};
 
-		const{body} = await fetch("https://api.imgur.com/3/album/FR7FYXA/images/0.json",{ method: 'GET', headers:headers})
-		.then (response => response.json())
+		await fetch('https://api.imgur.com/3/album/FR7FYXA/images/0.json', { method: 'GET', headers:headers })
+			.then (response => response.json())
 			.then(json=>{
-				let max = json.data.length;
-				let imgNum = rand.getRandomInt(max);
+				const max = json.data.length;
+				const imgNum = rand.getRandomInt(max);
 				console.log(json.data[imgNum].link);
-				  message.channel.send("Here's a bun!", {
-			            files: [
-			                json.data[imgNum].link
-			            ]
-			        });
+				message.channel.send('Here\'s a bun!', {
+					files: [
+						json.data[imgNum].link,
+					],
+				});
 			})
 			.catch((err) => console.error(err.message));
 	},
